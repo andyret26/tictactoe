@@ -39,25 +39,26 @@ const nextSymbol = computed<'X' | 'O'>(() => {
   }
 })
 
-const winner = computed<'P1' | 'P2' | ''>(() => {
+const winner = computed<'P1' | 'P2' | "">(() => {
   if(boxList.value.length <= 1) return ""
 
-  for (let i = 0; i < 3; i++) {
-    if (boxList.value[i].symbol === "O" && boxList.value[i+3].symbol === 'O' && boxList.value[i+6].symbol === 'O' ||
-        boxList.value[i*3].symbol === 'O' && boxList.value[(i*3)+1].symbol === 'O' && boxList.value[(i*3)+2].symbol === 'O') {
-          return 'P1' 
-    } else if (boxList.value[i].symbol === "X" && boxList.value[i+3].symbol === 'X' && boxList.value[i+6].symbol === 'X' ||
-              boxList.value[i*3].symbol === 'X' && boxList.value[(i*3)+1].symbol === 'X' && boxList.value[(i*3)+2].symbol === 'X') {
-          return "P2"
+  const checkWinner = (s: 'O' | 'X') => {
+    for (let i = 0; i < 3; i++) {
+      if (boxList.value[i].symbol === s && boxList.value[i+3].symbol === s && boxList.value[i+6].symbol === s ||
+          boxList.value[i*3].symbol === s && boxList.value[(i*3)+1].symbol === s && boxList.value[(i*3)+2].symbol === s) {
+            return s === 'O' ?  "P1" : "P2"
+      }
     }
-  }
-  for (let i = 1; i <= 2; i++) {
-    if (boxList.value[(i-1)*2].symbol === 'O' && boxList.value[4].symbol === 'O' && boxList.value[10 - (i*2)].symbol === 'O') return 'P1'
-    else if (boxList.value[(i-1)*2].symbol === 'X' && boxList.value[4].symbol === 'X' && boxList.value[10 - (i*2)].symbol === 'X') return 'P2'
+    for (let i = 1; i <= 2; i++) {
+      if (boxList.value[(i-1)*2].symbol === s && boxList.value[4].symbol === s && boxList.value[10 - (i*2)].symbol === s){
+        return s === 'O' ? "P1" : "P2"
+      }
+    }
+    return ""
   }
 
 
-  return ""
+  return checkWinner('O') || checkWinner('X')
 })
 
 const isGameWon = computed<boolean>(() => {
