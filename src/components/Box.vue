@@ -1,51 +1,34 @@
 <template>
-    <div class="box" @click.self="test()">
-        {{msg}}
-    </div>
-    
+    <button class="box" @click="emit('box-click', id)" :disabled="isTaken || isGameWon">
+        {{ symbol }}
+    </button>
 </template>
 
-<script>
-export default {
-    name:'Box',
-    props: {
-        boxNum: {
-            type: Number,
-            required: true
-        },
-
-        round: Number
-    },
-
-    data: function(){
-        return{
-            msg: '',
-            title: 'FORM CHILD TO PARENT'
-        }
-    },
-
-    methods: {
-        test: function(){
-            
-
-            if(this.round % 2 === 0){
-                this.msg = 'X'
-            }
-            else{
-                this.msg = 'O'
-            }
-
-
-            this.$emit('boxClicked', this.boxNum)
-        }
-    }
+<script setup lang="ts">
+interface Props {
+    isTaken: boolean
+    symbol: 'X' | 'O' | "" 
+    id: number
+    isGameWon: boolean
 }
+
+const props = defineProps<Props>()
+const emit = defineEmits(['box-click'])
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.box{
+    width: calc(400px / 4);
+    height: calc(400px / 4);
+    background-color: var(--bg-3);
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 72px;
 
-    .box{
-        font-size: 4em;
-    }
+}
 
 </style>
